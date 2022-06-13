@@ -1,13 +1,11 @@
 package hw03frequencyanalysis
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
-
-// Change to true if needed.
-var taskWithAsteriskIsCompleted = false
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -48,35 +46,47 @@ func TestTop10(t *testing.T) {
 		require.Len(t, Top10(""), 0)
 	})
 
-	t.Run("positive test", func(t *testing.T) {
-		if taskWithAsteriskIsCompleted {
-			expected := []string{
-				"а",         // 8
-				"он",        // 8
-				"и",         // 6
-				"ты",        // 5
-				"что",       // 5
-				"в",         // 4
-				"его",       // 4
-				"если",      // 4
-				"кристофер", // 4
-				"не",        // 4
-			}
-			require.Equal(t, expected, Top10(text))
-		} else {
-			expected := []string{
-				"он",        // 8
-				"а",         // 6
-				"и",         // 6
-				"ты",        // 5
-				"что",       // 5
-				"-",         // 4
-				"Кристофер", // 4
-				"если",      // 4
-				"не",        // 4
-				"то",        // 4
-			}
-			require.Equal(t, expected, Top10(text))
-		}
+	t.Run("no words in empty string s", func(t *testing.T) {
+		require.Len(t, Top10s(""), 0)
 	})
+
+	t.Run("positive test", func(t *testing.T) {
+		expected := []string{
+			"он",        // 8
+			"а",         // 6
+			"и",         // 6
+			"ты",        // 5
+			"что",       // 5
+			"-",         // 4
+			"Кристофер", // 4
+			"если",      // 4
+			"не",        // 4
+			"то",        // 4
+		}
+		require.Equal(t, expected, Top10(text))
+	})
+
+	t.Run("positive test s", func(t *testing.T) {
+		expected := []string{
+			"а",         // 8
+			"он",        // 8
+			"и",         // 6
+			"ты",        // 5
+			"что",       // 5
+			"в",         // 4
+			"его",       // 4
+			"если",      // 4
+			"кристофер", // 4
+			"не",        // 4
+		}
+		require.Equal(t, expected, Top10s(text))
+	})
+
+	for i, v := range []string{
+		"-", " --", "- ", " - ", " -- ", "- -", "---", "----------",
+	} {
+		t.Run(fmt.Sprintf("dash %d", i), func(t *testing.T) {
+			require.Len(t, Top10s(v), 0)
+		})
+	}
 }
