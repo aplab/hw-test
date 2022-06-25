@@ -48,4 +48,63 @@ func TestList(t *testing.T) {
 		}
 		require.Equal(t, []int{70, 80, 60, 40, 10, 30, 50}, elems)
 	})
+
+	t.Run("border conditions", func(t *testing.T) {
+		l := NewList()
+
+		l.PushFront(10) // [10]
+		l.PushFront(20) // [20, 10]
+		l.PushFront(30) // [30, 20, 10]
+		require.Equal(t, 3, l.Len())
+
+		l.MoveToFront(l.Back())
+		l.MoveToFront(l.Back()) // move to back twice
+		l.MoveToFront(l.Front().Next)
+		l.MoveToFront(l.Front())
+		l.MoveToFront(l.Front())
+		require.Equal(t, 3, l.Len())
+
+		require.Nil(t, l.Front().Prev)
+		require.Nil(t, l.Back().Next)
+
+		elems := make([]int, 0, l.Len())
+		for i := l.Front(); i != nil; i = i.Next {
+			elems = append(elems, i.Value.(int))
+		}
+		require.Equal(t, []int{10, 20, 30}, elems)
+
+		ll := l.Len() + 1 // more than length
+		f := l.Front()    // stash some element here
+		for i := 0; i < ll; i++ {
+			l.Remove(l.Front())
+		}
+		require.Equal(t, 0, l.Len())
+		require.Nil(t, l.Front())
+		require.Nil(t, l.Back())
+
+		l.Remove(f) // trying to remove unknown element from empty list
+		require.Equal(t, 0, l.Len())
+		require.Nil(t, l.Front())
+		require.Nil(t, l.Back())
+
+		l.PushFront(10) // [10]
+		l.PushFront(20) // [20, 10]
+		l.PushFront(30) // [30, 20, 10]
+		require.Equal(t, 3, l.Len())
+
+		ll = l.Len() + 1 // more than length
+		f = l.Front()
+		for i := 0; i < ll; i++ {
+			l.Remove(l.Back())
+		}
+
+		require.Equal(t, 0, l.Len())
+		require.Nil(t, l.Front())
+		require.Nil(t, l.Back())
+
+		l.Remove(f)
+		require.Equal(t, 0, l.Len())
+		require.Nil(t, l.Front())
+		require.Nil(t, l.Back())
+	})
 }
