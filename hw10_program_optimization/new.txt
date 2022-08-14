@@ -1,0 +1,7 @@
+goos: linux
+goarch: amd64
+pkg: github.com/aplab/hw-test/hw10_program_optimization
+cpu: AMD Ryzen 7 3700X 8-Core Processor             
+BenchmarkGetDomainStat-16    	1000000000	         0.1548 ns/op	       0 B/op	       0 allocs/op
+PASS
+ok  	github.com/aplab/hw-test/hw10_program_optimization	1.841s

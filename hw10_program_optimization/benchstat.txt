@@ -1,0 +1,8 @@
+name              old time/op    new time/op    delta
+GetDomainStat-16     353ms ± 0%       0ms ± 0%   ~     (p=1.000 n=1+1)
+
+name              old alloc/op   new alloc/op   delta
+GetDomainStat-16    97.9MB ± 0%     0.0MB        ~     (p=1.000 n=1+1)
+
+name              old allocs/op  new allocs/op  delta
+GetDomainStat-16      782k ± 0%        0k        ~     (p=1.000 n=1+1)
