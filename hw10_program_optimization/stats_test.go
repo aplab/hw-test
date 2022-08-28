@@ -1,9 +1,12 @@
+//go:build !bench
 // +build !bench
 
 package hw10programoptimization
 
 import (
+	"bufio"
 	"bytes"
+	"github.com/mailru/easyjson"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -35,5 +38,26 @@ func TestGetDomainStat(t *testing.T) {
 		result, err := GetDomainStat(bytes.NewBufferString(data), "unknown")
 		require.NoError(t, err)
 		require.Equal(t, DomainStat{}, result)
+	})
+
+	t.Run("get domain", func(t *testing.T) {
+		s := bufio.NewScanner(bytes.NewBufferString(data))
+		var u User
+		var d []string
+		var err error
+		for s.Scan() {
+			if err = easyjson.Unmarshal(s.Bytes(), &u); err != nil {
+				break
+			}
+			d = append(d, u.domain())
+		}
+		require.NoError(t, err)
+		require.Equal(t, d, []string{
+			"browsedrive.gov",
+			"browsecat.com",
+			"browsecat.com",
+			"teklist.net",
+			"linktype.com",
+		})
 	})
 }
