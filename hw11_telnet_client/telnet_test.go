@@ -62,4 +62,24 @@ func TestTelnetClient(t *testing.T) {
 
 		wg.Wait()
 	})
+
+	t.Run("wrong port", func(t *testing.T) {
+		arg := "hello"
+		_, err := checkPort(arg)
+		require.ErrorIs(t, err, ErrInvalidPort)
+	})
+
+	t.Run("outofrange port", func(t *testing.T) {
+		arg := "99999"
+		_, err := checkPort(arg)
+		require.ErrorIs(t, err, ErrInvalidPort)
+	})
+
+	t.Run("good port", func(t *testing.T) {
+		arg := "55555"
+		port, err := checkPort(arg)
+		expected := uint16(55555)
+		require.NoError(t, err)
+		require.Equal(t, port, &expected)
+	})
 }
